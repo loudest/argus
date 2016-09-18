@@ -12,6 +12,12 @@
 				margin: 0px;
 				overflow: hidden;
 			}
+			#video-feed {
+				position:fixed;
+				z-index: 100;
+				top:100;
+				left:200;
+			}
 		</style>
 	</head>
 	<body>
@@ -21,7 +27,7 @@
 		<script src="js/CanvasRenderer.js"></script>
 		<script src="js/Stats.js"></script>
 
-		<img id="resize" src="/video_feed" width="480" height="360">			
+		<img id="video-feed" src="/video_feed" width="480" height="360">			
 		<video id="video" autoplay loop webkit-playsinline style="display:none">
 			<source src="assets/small.mp4" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'>
 		</video>

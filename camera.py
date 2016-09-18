@@ -4,8 +4,8 @@ import sys
 from glob import glob
 import itertools as it
 
-
 face1 = cv2.CascadeClassifier("haarcascade_frontalface_default.xml")
+overlay = cv2.imread("overlay.png", -1)
 
 def detect_bounds(img, cascade):
     rects = cascade.detectMultiScale(img, scaleFactor=1.3, minNeighbors=4, minSize=(30, 30), flags = cv2.CASCADE_SCALE_IMAGE)
@@ -18,7 +18,17 @@ def draw_rects(img, rects, color):
     for x1, y1, x2, y2 in rects:
         cv2.rectangle(img, (x1, y1), (x2, y2), color, 2)
 
+def draw_overlay(img, rect):
+    x1, y1, x2, y2 = rect
+    y=y2-y1 + 40
+    x=x2-x1 + 40
+    small = cv2.resize(overlay, (x, y))
 
+    x_offset = x1 - 10
+    y_offset = y1 - 10
+
+    for c in range(0,3):
+        img[y_offset:y_offset + small.shape[0], x_offset:x_offset+ small.shape[1], c] = small[:,:,c] * (small[:,:,3]/255.0) + img[y_offset:y_offset+small.shape[0], x_offset:x_offset+small.shape[1], c] * (1.0 - small[:,:,3]/255.0)
 
 class VideoCamera(object):
 
@@ -41,6 +51,11 @@ class VideoCamera(object):
             gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
             gray = cv2.equalizeHist(gray)
             found = detect_bounds(gray, face1)
+
+            #if len(found) > 0:
+            #    for rect in found:
+            #        draw_overlay(image, rect)
+
             draw_rects(image, found, (0, 255, 0))  
 
         # We are using Motion JPEG, but OpenCV defaults to capture raw images,
