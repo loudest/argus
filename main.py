@@ -22,6 +22,10 @@ app = Flask(__name__, static_url_path='')
 def index():
     return render_template('video.html')
 
+@app.route('/volume')
+def volume():
+    return render_template('volume.html')
+
 def gen(camera):
     while True:
         frame = camera.get_frame()

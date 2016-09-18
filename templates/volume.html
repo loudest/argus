@@ -1,0 +1,28 @@
+<!doctype html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<title>Audio Recorder</title>
+
+	<script src="js/recorderjs/recorder.js"></script>
+	<script src="js/main.js"></script>
+	<style>
+	#analyser { 
+		display: inline-block; 
+		background: black; 
+		box-shadow: 0px 0px 10px blue;
+	}
+	#viz {
+		display: flex;
+		flex-direction: column;
+		justify-content: space-around;
+		align-items: center;
+	}
+	</style>
+</head>
+<body>
+	<div id="viz">
+		<canvas id="analyser" width="1080" height="500"></canvas>
+	</div>
+</body>
+</html>

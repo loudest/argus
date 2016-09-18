@@ -5,6 +5,9 @@
 		<title>three.js canvas - materials - video</title>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  		<link rel="stylesheet" href="/resources/demos/style.css">
+
 		<style>
 			body {
 				font-family: Monospace;
@@ -18,6 +21,23 @@
 				top:100;
 				left:200;
 			}
+			#analyser { 
+				display: inline-block; 
+				background: black; 
+				box-shadow: 0px 0px 10px blue;
+			}
+			#viz {
+				position:fixed;
+				display: flex;
+				flex-direction: column;
+				justify-content: space-around;
+				align-items: center;
+			}
+			#container {
+				z-index: -1;
+				top:0;
+				left:0;
+			}
 		</style>
 	</head>
 	<body>
@@ -26,12 +46,31 @@
 		<script src="js/Projector.js"></script>
 		<script src="js/CanvasRenderer.js"></script>
 		<script src="js/Stats.js"></script>
+		<script src="js/recorderjs/recorder.js"></script>
+		<script src="js/main.js"></script>
+  		<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+ 		<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
 		<img id="video-feed" src="/video_feed" width="480" height="360">			
 		<video id="video" autoplay loop webkit-playsinline style="display:none">
 			<source src="assets/small.mp4" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'>
 		</video>
+		<div id="viz">
+			<canvas id="analyser" width="500" height="200"></canvas>
+		</div>
+		<div id="container" />
+		<div id="fps" />		
 
+		<script>
+		$( function() {
+			$( "#video-feed" ).draggable();
+		    $( "#video-feed" ).resizable();
+			$( "#viz" ).draggable();
+		    $( "#viz" ).resizable();
+			$( "#fps" ).draggable();
+
+		} );
+		</script>
 
 		<script>
 			var AMOUNT = 100;
@@ -57,10 +96,9 @@
 
 			function init() {
 
-				container = document.createElement( 'div' );
-				document.body.appendChild( container );
+				container = document.getElementById( 'container' );
+				info = document.getElementById( 'fps' );
 
-				var info = document.createElement( 'div' );
 				info.style.position = 'absolute';
 				info.style.top = '10px';
 				info.style.width = '100%';
