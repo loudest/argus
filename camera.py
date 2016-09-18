@@ -3,6 +3,8 @@ import numpy as np
 import sys
 from glob import glob
 import itertools as it
+import time
+
 
 face1 = cv2.CascadeClassifier("haarcascade_frontalface_default.xml")
 overlay = cv2.imread("overlay.png", -1)
@@ -52,11 +54,11 @@ class VideoCamera(object):
             gray = cv2.equalizeHist(gray)
             found = detect_bounds(gray, face1)
 
-            #if len(found) > 0:
-            #    for rect in found:
-            #        draw_overlay(image, rect)
+            if len(found) > 0:
+                for rect in found:
+                    draw_overlay(image, rect)
 
-            draw_rects(image, found, (0, 255, 0))  
+            draw_rects(image, found, (0, 255, 0)) 
 
         # We are using Motion JPEG, but OpenCV defaults to capture raw images,
         # so we must encode it into JPEG in order to correctly display the
