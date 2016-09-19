@@ -1,4 +1,4 @@
-## Python Video stream Facial Biometrics
+## Python videostreams for facial detection & biometrics
 
 Use video streams to improve OpenCV detection of faces and with biometric markers.      
 
