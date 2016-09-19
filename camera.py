@@ -6,7 +6,9 @@ import itertools as it
 import time
 
 
-face1 = cv2.CascadeClassifier("haarcascade_frontalface_default.xml")
+eyes = cv2.CascadeClassifier("haarcascade_eye.xml")
+mouth = cv2.CascadeClassifier("haarcascade_mcs_mouth.xml")
+nose = cv2.CascadeClassifier("haarcascade_mcs_nose.xml")
 overlay = cv2.imread("overlay.png", -1)
 
 def detect_bounds(img, cascade):
@@ -52,13 +54,18 @@ class VideoCamera(object):
         if success == True:
             gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
             gray = cv2.equalizeHist(gray)
-            found = detect_bounds(gray, face1)
+            found1 = detect_bounds(gray, eyes)
+            found2 = detect_bounds(gray, mouth)
+            found3 = detect_bounds(gray, nose)
 
-            if len(found) > 0:
-                for rect in found:
-                    draw_overlay(image, rect)
+            #if len(found) > 0:
+            #    for rect in found:
+            #        draw_overlay(image, rect)
 
-            draw_rects(image, found, (0, 255, 0)) 
+            draw_rects(image, found1, (0, 255, 0))
+            draw_rects(image, found2, (0, 255, 0))
+            draw_rects(image, found3, (0, 255, 0))             
+
 
         # We are using Motion JPEG, but OpenCV defaults to capture raw images,
         # so we must encode it into JPEG in order to correctly display the
