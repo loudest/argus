@@ -21,7 +21,7 @@ Our team is comprised of:
 We made use of:
 - [Flask](http://flask.pocoo.org/) To render local host and video streams
 - [OpenCV](http://opencv.org/) For video analysis and facial detection
-- [openbr](http://scikit-learn.org/stable/) biometrics markers and using machine learning to improve accuracy
+- [openbr](http://openbiometrics.org/) biometrics markers and using machine learning to improve accuracy
 
 ## Contributing
 
