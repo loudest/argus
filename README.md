@@ -1,6 +1,8 @@
-## GreenLines
+## Python Videostream Facial Biometrics
 
 Use videostreams to improve OpenCV detection of faces and with biometric markers.      
+
+![Screenshot](screenshot.png)
 
 ## Challenge and Approach
 
