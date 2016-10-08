@@ -6,10 +6,10 @@ import itertools as it
 import time
 
 
-eyes = cv2.CascadeClassifier("haarcascade_eye.xml")
-mouth = cv2.CascadeClassifier("haarcascade_mcs_mouth.xml")
-nose = cv2.CascadeClassifier("haarcascade_mcs_nose.xml")
-head = cv2.CascadeClassifier("haarcascade_frontalface_default.xml")
+eyes = cv2.CascadeClassifier("haarcascades/haarcascade_eye.xml")
+mouth = cv2.CascadeClassifier("haarcascades/haarcascade_mcs_mouth.xml")
+nose = cv2.CascadeClassifier("haarcascades/haarcascade_mcs_nose.xml")
+head = cv2.CascadeClassifier("haarcascades/haarcascade_frontalface_default.xml")
 overlay = cv2.imread("overlay.png", -1)
 
 def detect_bounds(img, cascade):
@@ -55,16 +55,14 @@ class VideoCamera(object):
         if success == True:
             gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
             gray = cv2.equalizeHist(gray)
-            found_eyes = detect_bounds(gray, eyes)
-            found_mouth = detect_bounds(gray, mouth)
-            found_nose = detect_bounds(gray, nose)
+            #found_eyes = detect_bounds(gray, eyes)
             found_head = detect_bounds(gray, head)
 
             # only draw head
-            if (len(found_head) > 0) and ((len(found_head) > 0) or (len(found_head) > 0) or (len(found_head) > 0)):
-                draw_rects(image, found1, (0, 255, 0))
-                draw_rects(image, found2, (0, 255, 0))
-                draw_rects(image, found3, (0, 255, 0))             
+            if (len(found_head) > 0):
+                #draw_rects(image, found_head, (0, 255, 0))
+                for rect in found_head:
+                    draw_overlay(image, rect)
 
         # We are using Motion JPEG, but OpenCV defaults to capture raw images,
         # so we must encode it into JPEG in order to correctly display the
