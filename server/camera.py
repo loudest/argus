@@ -1,18 +1,23 @@
-import cv2
-import numpy as np
-import sys
+import cv2, sys, time, datetime, serial, numpy as np, itertools as it
 from glob import glob
-import itertools as it
-import time
-import datetime
 
 eyes = cv2.CascadeClassifier("haarcascades/haarcascade_eye.xml")
 mouth = cv2.CascadeClassifier("haarcascades/haarcascade_mcs_mouth.xml")
 nose = cv2.CascadeClassifier("haarcascades/haarcascade_mcs_nose.xml")
 head = cv2.CascadeClassifier("haarcascades/haarcascade_frontalface_default.xml")
-overlay_mask = cv2.imread("overlay.png", -1)
-overlay_eyes = cv2.imread("eye.png", -1)
+overlay_mask = cv2.imread("static/overlay.png", -1)
+overlay_eyes = cv2.imread("static/eye.png", -1)
 text_color = (0, 255, 0)
+
+def setup_serial():
+	ser = serial.Serial(
+		port='COM3',
+		baudrate=9600,
+		parity=serial.PARITY_ODD,
+		stopbits=serial.STOPBITS_TWO,
+		bytesize=serial.SEVENBITS
+	)
+	return ser
 
 def detect_bounds(img, cascade):
     rects = cascade.detectMultiScale(img, scaleFactor=1.3, minNeighbors=4, minSize=(30, 30), flags = cv2.CASCADE_SCALE_IMAGE)
@@ -46,13 +51,8 @@ def blur_rectangle(img, rect):
 class VideoCamera(object):
 
     def __init__(self):
-        # Using OpenCV to capture from device 0. If you have trouble capturing
-        # from a webcam, comment the line below out and use a video file
-        # instead.
         self.video = cv2.VideoCapture(0)
-        # If you decide to use video.mp4, you must have this file in the folder
-        # as the main.py.
-        # self.video = cv2.VideoCapture('video.mp4')
+        self.serial = setup_serial()
     
     def __del__(self):
         self.video.release()
