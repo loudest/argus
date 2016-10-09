@@ -1,4 +1,4 @@
-import cv2, sys, time, datetime, serial, numpy as np, itertools as it
+import cv2, sys, time, datetime, numpy as np, itertools as it
 from glob import glob
 
 eyes = cv2.CascadeClassifier("haarcascades/haarcascade_eye.xml")
@@ -8,16 +8,6 @@ head = cv2.CascadeClassifier("haarcascades/haarcascade_frontalface_default.xml")
 overlay_mask = cv2.imread("static/overlay.png", -1)
 overlay_eyes = cv2.imread("static/eye.png", -1)
 text_color = (0, 255, 0)
-
-def setup_serial():
-	ser = serial.Serial(
-		port='COM3',
-		baudrate=9600,
-		parity=serial.PARITY_ODD,
-		stopbits=serial.STOPBITS_TWO,
-		bytesize=serial.SEVENBITS
-	)
-	return ser
 
 def detect_bounds(img, cascade):
     rects = cascade.detectMultiScale(img, scaleFactor=1.3, minNeighbors=4, minSize=(30, 30), flags = cv2.CASCADE_SCALE_IMAGE)
@@ -52,7 +42,6 @@ class VideoCamera(object):
 
     def __init__(self):
         self.video = cv2.VideoCapture(0)
-        self.serial = setup_serial()
     
     def __del__(self):
         self.video.release()
@@ -78,11 +67,11 @@ class VideoCamera(object):
             # draw overlay data
             temperature = "Temperature: 80F"
             humidity = "Humidity: 50%"
-            cv2.rectangle(image, (0, 0), (30, 60), (0,0,0), 2)
+            cv2.rectangle(image, (0, 0), (280, 70), (0,0,0), -1)
             cv2.putText(image, temperature, (10, 25), cv2.FONT_HERSHEY_SIMPLEX, 0.8, text_color, 2)
             cv2.putText(image, humidity, (10, 55), cv2.FONT_HERSHEY_SIMPLEX, 0.8, text_color, 2)            
-            cv2.putText(image, datetime.datetime.now().strftime("%A %d %B %Y %I:%M:%S%p"), (10, image.shape[0] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1)
-
+            cv2.putText(image, datetime.datetime.now().strftime("%A, %d %B %Y - %I:%M:%S %p"), (10, image.shape[0] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1)
+						
         # We are using Motion JPEG, but OpenCV defaults to capture raw images,
         # so we must encode it into JPEG in order to correctly display the
         # video stream.

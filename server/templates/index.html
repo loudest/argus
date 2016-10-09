@@ -42,17 +42,20 @@
 	</head>
 	<body>
 
+		<script src="js/Stats.js"></script>
   		<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
  		<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
-		<img id="video-feed" src="/video_feed" width="480" height="360">			
-
+		<img id="video-feed" src="/video_feed" width="800" height="600">			
+		<video id="video" autoplay loop webkit-playsinline style="display:none">
+		</video>
+		
 		<script>
 		$( function() {
 			$( "#video-feed" ).draggable();
 		    $( "#video-feed" ).resizable();
 		} );
+		
 		</script>
-
 	</body>
 </html>
