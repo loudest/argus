@@ -6,19 +6,10 @@ eyes = cv2.CascadeClassifier("haarcascades/haarcascade_eye.xml")
 mouth = cv2.CascadeClassifier("haarcascades/haarcascade_mcs_mouth.xml")
 nose = cv2.CascadeClassifier("haarcascades/haarcascade_mcs_nose.xml")
 head = cv2.CascadeClassifier("haarcascades/haarcascade_frontalface_default.xml")
-overlay_mask = cv2.imread("static/overlay.png", -1)
-overlay_eyes = cv2.imread("static/eye.png", -1)
+overlay_mask = cv2.imread("static/images/overlay.png", -1)
+overlay_eyes = cv2.imread("static/images/eye.png", -1)
+#overlay_logo = cv2.imread("static/images/logo.png", -1)
 text_color = (0, 255, 0)
-
-def setup_serial():
-    serial_object = serial.Serial(
-        port='COM3',
-        baudrate=9600,
-        parity=serial.PARITY_ODD,
-        stopbits=serial.STOPBITS_TWO,
-        bytesize=serial.SEVENBITS
-    )
-    return serial_object   
 
 def detect_bounds(img, cascade):
     rects = cascade.detectMultiScale(img, scaleFactor=1.3, minNeighbors=4, minSize=(30, 30), flags = cv2.CASCADE_SCALE_IMAGE)
@@ -49,21 +40,34 @@ def blur_rectangle(img, rect):
     sub_face = cv2.GaussianBlur(sub_face,(23, 23), 30)
     img[y:y+sub_face.shape[0], x:x+sub_face.shape[1]] = sub_face
 
-def parse_serial_connection(ser):
-    string = ser.read(15)
+def parse_serial_connection():
+    serial_object = serial.Serial(
+        port='COM3',
+        baudrate=9600,
+        parity=serial.PARITY_ODD,
+        stopbits=serial.STOPBITS_TWO,
+        bytesize=serial.SEVENBITS
+    )
+    string = serial_object.read(15)
     string = string.strip()
-    array = string.split('\n')
-    temperature = float(array[0])
-    humidity = float(array[1])
-    return {"temperature":temperature,"humidity":humidity}
+    array = string.split('\r\n')
+    temperature = 0.0
+    humidity = 0.0
+    if(array[0] != None):
+        temperature = float(array[0].strip())
+    if(array[1] != None):
+        humidity =  float(array[1].strip())
+    value = {"temperature":str(temperature),"humidity":str(humidity)}
+    print value
+    serial_object.close()
+    return value
 
 class VideoCamera(object):
 
     def __init__(self):
         #init values
         self.video = cv2.VideoCapture(0)
-        self.serial_object = setup_serial()
-        data = parse_serial_connection(self.serial_object)
+        data = parse_serial_connection()
         self.temperature = data['temperature']
         self.humidity = data['humidity']
         self.lock = 0
@@ -88,14 +92,14 @@ class VideoCamera(object):
                         draw_overlay(image, rect, overlay_eyes)
                     except:
                         pass
-                if(self.lock % 60 == 0):
+                if(self.lock % 300 == 0):
                     SMSTwilio.send_sms(self.humidity, self.temperature)
 
             # get sensor data and only use if current minute is even to update temperature for polling
             if(self.lock % 60 == 0):
-                data = parse_serial_connection(self.serial_object)
-                self.temperature = data['temperature']
-                self.humidity = data['humidity']
+                data = parse_serial_connection()
+                self.temperature = str(data['temperature'])
+                self.humidity = str(data['humidity'])
 
             #semaphore lock
             self.lock = self.lock + 1
@@ -107,7 +111,10 @@ class VideoCamera(object):
             cv2.putText(image, temperature_string, (10, 25), cv2.FONT_HERSHEY_SIMPLEX, 0.8, text_color, 2)
             cv2.putText(image, humidity_string, (10, 55), cv2.FONT_HERSHEY_SIMPLEX, 0.8, text_color, 2)            
             cv2.putText(image, datetime.datetime.now().strftime("%A, %d %B %Y - %I:%M:%S %p"), (10, image.shape[0] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1)
-						
+		  
+            # drag logo
+            #draw_overlay(image, [0,0,1,1], overlay_logo)
+
         # We are using Motion JPEG, but OpenCV defaults to capture raw images,
         # so we must encode it into JPEG in order to correctly display the
         # video stream.
