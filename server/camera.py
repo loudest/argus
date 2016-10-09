@@ -1,5 +1,6 @@
 import cv2, sys, time, datetime, numpy as np, itertools as it, serial
 from glob import glob
+import SMSTwilio
 
 eyes = cv2.CascadeClassifier("haarcascades/haarcascade_eye.xml")
 mouth = cv2.CascadeClassifier("haarcascades/haarcascade_mcs_mouth.xml")
@@ -81,15 +82,17 @@ class VideoCamera(object):
 
             # only draw head
             if (len(found_head) > 0):
-                #draw_rects(image, found_head, (255, 255, 255))
+                draw_rects(image, found_head, (255, 255, 255))
                 for rect in found_eyes:
                     try:
                         draw_overlay(image, rect, overlay_eyes)
                     except:
                         pass
+                if(self.lock % 30 == 0):
+                    SMSTwilio.send_sms()
 
             # get sensor data and only use if current minute is even to update temperature for polling
-            if(self.lock % 10 == 0):
+            if(self.lock % 60 == 0):
                 data = parse_serial_connection(self.serial_object)
                 self.temperature = data['temperature']
                 self.humidity = data['humidity']
@@ -98,7 +101,7 @@ class VideoCamera(object):
             self.lock = self.lock + 1
 
             # draw overlay
-            temperature_string = "Temperature: "+str(self.temperature)+"*F"
+            temperature_string = "Temperature: "+str(self.temperature)+"F"
             humidity_string = "Humidity: "+str(self.humidity)+'%'
             cv2.rectangle(image, (0, 0), (280, 70), (0,0,0), -1)
             cv2.putText(image, temperature_string, (10, 25), cv2.FONT_HERSHEY_SIMPLEX, 0.8, text_color, 2)
