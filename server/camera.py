@@ -88,8 +88,8 @@ class VideoCamera(object):
                         draw_overlay(image, rect, overlay_eyes)
                     except:
                         pass
-                if(self.lock % 30 == 0):
-                    SMSTwilio.send_sms()
+                if(self.lock % 60 == 0):
+                    SMSTwilio.send_sms(self.humidity, self.temperature)
 
             # get sensor data and only use if current minute is even to update temperature for polling
             if(self.lock % 60 == 0):
