@@ -1,4 +1,4 @@
-import cv2, sys, time, datetime, numpy as np, itertools as it
+import cv2, sys, time, datetime, numpy as np, itertools as it, serial
 from glob import glob
 
 eyes = cv2.CascadeClassifier("haarcascades/haarcascade_eye.xml")
@@ -8,6 +8,16 @@ head = cv2.CascadeClassifier("haarcascades/haarcascade_frontalface_default.xml")
 overlay_mask = cv2.imread("static/overlay.png", -1)
 overlay_eyes = cv2.imread("static/eye.png", -1)
 text_color = (0, 255, 0)
+
+def setup_serial():
+    serial_object = serial.Serial(
+        port='COM3',
+        baudrate=9600,
+        parity=serial.PARITY_ODD,
+        stopbits=serial.STOPBITS_TWO,
+        bytesize=serial.SEVENBITS
+    )
+    return serial_object   
 
 def detect_bounds(img, cascade):
     rects = cascade.detectMultiScale(img, scaleFactor=1.3, minNeighbors=4, minSize=(30, 30), flags = cv2.CASCADE_SCALE_IMAGE)
@@ -38,10 +48,24 @@ def blur_rectangle(img, rect):
     sub_face = cv2.GaussianBlur(sub_face,(23, 23), 30)
     img[y:y+sub_face.shape[0], x:x+sub_face.shape[1]] = sub_face
 
+def parse_serial_connection(ser):
+    string = ser.read(15)
+    string = string.strip()
+    array = string.split('\n')
+    temperature = float(array[0])
+    humidity = float(array[1])
+    return {"temperature":temperature,"humidity":humidity}
+
 class VideoCamera(object):
 
     def __init__(self):
+        #init values
         self.video = cv2.VideoCapture(0)
+        self.serial_object = setup_serial()
+        data = parse_serial_connection(self.serial_object)
+        self.temperature = data['temperature']
+        self.humidity = data['humidity']
+        self.lock = 0
     
     def __del__(self):
         self.video.release()
@@ -57,19 +81,28 @@ class VideoCamera(object):
 
             # only draw head
             if (len(found_head) > 0):
-                draw_rects(image, found_head, (255, 255, 255))
+                #draw_rects(image, found_head, (255, 255, 255))
                 for rect in found_eyes:
                     try:
                         draw_overlay(image, rect, overlay_eyes)
                     except:
                         pass
 
-            # draw overlay data
-            temperature = "Temperature: 80F"
-            humidity = "Humidity: 50%"
+            # get sensor data and only use if current minute is even to update temperature for polling
+            if(self.lock % 10 == 0):
+                data = parse_serial_connection(self.serial_object)
+                self.temperature = data['temperature']
+                self.humidity = data['humidity']
+
+            #semaphore lock
+            self.lock = self.lock + 1
+
+            # draw overlay
+            temperature_string = "Temperature: "+str(self.temperature)+"*F"
+            humidity_string = "Humidity: "+str(self.humidity)+'%'
             cv2.rectangle(image, (0, 0), (280, 70), (0,0,0), -1)
-            cv2.putText(image, temperature, (10, 25), cv2.FONT_HERSHEY_SIMPLEX, 0.8, text_color, 2)
-            cv2.putText(image, humidity, (10, 55), cv2.FONT_HERSHEY_SIMPLEX, 0.8, text_color, 2)            
+            cv2.putText(image, temperature_string, (10, 25), cv2.FONT_HERSHEY_SIMPLEX, 0.8, text_color, 2)
+            cv2.putText(image, humidity_string, (10, 55), cv2.FONT_HERSHEY_SIMPLEX, 0.8, text_color, 2)            
             cv2.putText(image, datetime.datetime.now().strftime("%A, %d %B %Y - %I:%M:%S %p"), (10, image.shape[0] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1)
 						
         # We are using Motion JPEG, but OpenCV defaults to capture raw images,
