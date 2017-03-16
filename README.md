@@ -1,6 +1,7 @@
 ## Python videostreams for facial detection & biometrics
 
-Use machine learning to analyize video stream to improve OpenCV detection of faces and with biometric markers (for example emotion detection).
+1. Analyize video streams with OpenCV object detection of faces and apply biometric markers to data.
+2. Utilize IoT sensors (such as tempature, humidity) to improve the data collection process.
 
 ![Screenshot](screenshot.png)
 
