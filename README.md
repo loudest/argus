@@ -32,6 +32,7 @@ We made use of:
 
 ## TO-DO
 
-1. In camera.py, the function parse_serial_connection() utilizes a COM3 serial connection on a Arduino board.  The I/O is polling very 60 seconds.  Due to the design nature of this with Flask, process Threading was not possible to dynamically update the 
+1. [Blocking I/O] In camera.py, the function parse_serial_connection() utilizes a COM3 serial connection on an Arduino board.  The I/O is polling very 60 seconds.
+2. [Threading] Update sensor data as a sperate thread with a dynamic endpoint to a Flask route.  
 
 Our code is licensed under the [MIT License](LICENSE.md). Pull requests will be accepted to this repo, pending review and approval.
