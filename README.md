@@ -1,16 +1,14 @@
 ## Python videostreams for facial detection & biometrics
 
-1. Analyize video streams with OpenCV object detection of faces and apply biometric markers to data.
-2. Utilize IoT sensors (such as tempature, humidity) to improve the data collection process.
-
 ![Screenshot](screenshot.png)
 
 ## Challenge and Approach
 
 Our approach for satisfying this challenge was to:
 
-- Utilize the computer's webcam to detect bounding boxes for eyes, nose, and mouth.  Once the bounding region has been assigned with machine learning, the biometric marker is compared against a mathematical predictive models to improved facial recognition detection.
-- Run the webcam on a Raseberry PI or server with Flask acting as a micro-service to stream video realtime as a image/jpeg video feed.
+1. Analyize video streams with facial object detection and apply biometric markers to data.
+2. Utilize IoT sensors (such as tempature, humidity) to improve the data collection process.
+3. Output JSON data as a Python Flask micro-service so a Machine Learning datasets can be generated.
 
 ## Team Members
 
