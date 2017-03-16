@@ -1,6 +1,5 @@
 import cv2, sys, time, datetime, numpy as np, itertools as it, serial
 from glob import glob
-import SMSTwilio
 
 eyes = cv2.CascadeClassifier("haarcascades/haarcascade_eye.xml")
 mouth = cv2.CascadeClassifier("haarcascades/haarcascade_mcs_mouth.xml")
