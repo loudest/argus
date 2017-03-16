@@ -1,14 +1,14 @@
-## Python videostreams for facial detection & biometrics
+## Python videostreams for facial recognization & biometrics
 
 ![Screenshot](screenshot.png)
 
 ## Challenge and Approach
 
-Our approach for satisfying this challenge was to:
+Our approach for satisfying this Machine Learning challenge was to:
 
 1. Analyize video streams with facial object detection and apply biometric markers to data.
 2. Utilize IoT sensors (such as tempature, humidity) to improve the data collection process.
-3. Output JSON data as a Python Flask micro-service so a Machine Learning datasets can be generated.
+3. Develop an microservice that outputs JSON data so Machine Learning datasets can be collected.
 
 ## Team Members
 
