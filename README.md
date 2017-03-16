@@ -19,9 +19,9 @@ Our team is comprised of:
 ## Technologies, APIs, and Datasets Utilized
 
 We made use of:
-- [Flask](http://flask.pocoo.org/) to render local host and video streams
+- [Flask](http://flask.pocoo.org/) REST micro-service endpoints
 - [OpenCV](http://opencv.org/) for video analysis and facial detection
-- [openbr](http://openbiometrics.org/) biometrics markers and using machine learning to improve accuracy
+- [openbr](http://openbiometrics.org/) facial biometrics 
 - [Arduino Uno](https://www.arduino.cc/en/Main/ArduinoBoardUno/) to obtain temperature and humidity data.
 
 ## How to run our app:
