@@ -24,6 +24,12 @@ We made use of:
 - [openbr](http://openbiometrics.org/) facial biometrics 
 - [Arduino Uno](https://www.arduino.cc/en/Main/ArduinoBoardUno/) to obtain temperature and humidity data.
 
+## Microservice REST API explained
+Flask services listens to the following endpoints:
+1. /video_feed - raw video feed as image/jpeg stream 
+2. /sensor_data - IoT sensor data returned as a JSON {"temperature":string,"humidity":string}
+3. /facial_data - Facial biometrics data {"data":{"head_cordinates":array[{x,y}],"left_eye_cordinates":array[{x,y}],"right_eye_cordinates":array[{x,y}],"mouth_cordinates":array[{x,y}],"mood":string,"facial_hash":string}
+
 ## How to run our app:
 
 1. Go into the server/ directory
