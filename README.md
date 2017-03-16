@@ -28,7 +28,7 @@ We made use of:
 Flask services listens to the following endpoints:
 1. /video_feed - raw video feed as image/jpeg stream 
 2. /sensor_data - IoT sensor data returned as a JSON {"temperature":string,"humidity":string}
-3. /facial_data - Facial biometrics data {"data":{"head_cordinates":array[{x,y}],"left_eye_cordinates":array[{x,y}],"right_eye_cordinates":array[{x,y}],"mouth_cordinates":array[{x,y}],"mood":string,"facial_hash":string}
+3. /facial_data - Facial biometrics data {"data":{"head_cordinates":array[{x,y}],"left_eye_coordinates":array[{x,y}],"right_eye_coordinates":array[{x,y}],"mouth_coordinates":array[{x,y}],"mood":string,"facial_hash_string":string}
 
 ## How to run our app:
 
