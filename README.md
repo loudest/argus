@@ -9,6 +9,7 @@ Use machine learning to analyize video stream to improve OpenCV detection of fac
 Our approach for satisfying this challenge was to:
 
 - Utilize the computer's webcam to detect bounding boxes for eyes, nose, and mouth.  Once the bounding region has been assigned with machine learning, the biometric marker is compared against a mathematical predictive models to improved facial recognition detection.
+- Run the webcam on a Raseberry PI or server with Flask acting as a micro-service to stream video realtime as a image/jpeg video feed.
 
 ## Team Members
 
@@ -19,13 +20,18 @@ Our team is comprised of:
 ## Technologies, APIs, and Datasets Utilized
 
 We made use of:
-- [Flask](http://flask.pocoo.org/) To render local host and video streams
-- [OpenCV](http://opencv.org/) For video analysis and facial detection
+- [Flask](http://flask.pocoo.org/) to render local host and video streams
+- [OpenCV](http://opencv.org/) for video analysis and facial detection
 - [openbr](http://openbiometrics.org/) biometrics markers and using machine learning to improve accuracy
+- [Arduino Uno](https://www.arduino.cc/en/Main/ArduinoBoardUno/) to obtain temperature and humidity data.
 
 ## How to run our app:
 
 1. Go into the server/ directory
 2. Run it via: python main.py
+
+## TO-DO
+
+1. In camera.py, the function parse_serial_connection() utilizes a COM3 serial connection on a Arduino board.  The I/O is polling very 60 seconds.  Due to the design nature of this with Flask, process Threading was not possible to dynamically update the 
 
 Our code is licensed under the [MIT License](LICENSE.md). Pull requests will be accepted to this repo, pending review and approval.
