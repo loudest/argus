@@ -8,7 +8,7 @@ Our approach for satisfying this Machine Learning challenge was to:
 
 1. Analyize video streams with facial object detection and apply biometric markers to data (facial recognition).
 2. Utilize IoT sensors (tempature, humidity) to improve the data collection process (location data).
-3. Develop a microservice that outputs JSON data so datasets can be collected and used by Machine Learning API can crunch the data.
+3. Develop a microservice that outputs JSON data so datasets can be collected and used by a Machine Learning API.
 
 ## Team Members
 
