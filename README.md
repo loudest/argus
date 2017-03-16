@@ -18,7 +18,7 @@ Our team is comprised of:
 
 ## Technologies, APIs, and Datasets Utilized
 
-We made use of:
+I made use of:
 - [Flask](http://flask.pocoo.org/) python RESTful microservice
 - [OpenCV](http://opencv.org/) for video analysis and facial detection
 - [openbr](http://openbiometrics.org/) facial biometrics 
@@ -26,7 +26,7 @@ We made use of:
 - [JS Stats](http://github.com/mrdoob/stats.js) javascript for video frame rate detection and CPU utilization
 
 ## Microservice REST API explained
-Flask services listens to the following endpoints:
+Flask services listens to the following REST endpoints:
 1. /video_feed - raw video feed as Motion JPEG stream 
 2. /sensor_data - IoT sensor data returned as JSON: {"temperature":string,"humidity":string}
 3. /facial_data - Facial biometrics as JSON: {"data":{"head_cordinates":array[{x,y}],"left_eye_coordinates":array[{x,y}],"right_eye_coordinates":array[{x,y}],"mouth_coordinates":array[{x,y}],"mood":string,"facial_hash_string":string}
